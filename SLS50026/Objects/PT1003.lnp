@@ -1,0 +1,16 @@
+--cpu Cortex-M4.fp
+".\objects\startup_stm32f429xx.o"
+".\objects\system.o"
+".\objects\timer.o"
+".\objects\lcd.o"
+".\objects\sdram.o"
+".\objects\gpio.o"
+".\objects\render.o"
+".\objects\font.o"
+".\objects\dma2d.o"
+".\objects\main.o"
+".\objects\texture.o"
+--strict --scatter ".\Objects\PT1003.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\PT1003.map" -o .\Objects\PT1003.axf
