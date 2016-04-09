@@ -137,25 +137,36 @@ int SDRAM_Bank_initial(uint32_t SDRAM_Bank)
         if(SDRAM_Bank == SDRAM_BANK1){                   // bank1
                 /* SDRAM bank 控制寄存器配置
                  NC：8bit；NR：12bit；NWID：16bit；NB：4；CAS：3 cycles；WP：0(允许写)；
-                 SDCLK：2 HCLK cycle；RBURST：0；RPUPE：1 HCLK cycle */ 
+                 SDCLK：2 HCLK cycle；RBURST：0；RPIPE：1 HCLK cycle */ 
+		/* SDRAM bank 控制寄存器配置
+                 NC：10bit；NR：12bit；NWID：16bit；NB：4；CAS：3 cycles；WP：0(允许写)；
+                 SDCLK：2 HCLK cycle；RBURST：0；RPIPE：1 HCLK cycle */ 
                 FMC_Bank5_6->SDCR[SDRAM_BANK1] &= 0x00000000;
-                FMC_Bank5_6->SDCR[SDRAM_BANK1]  = FMC_SDCR1_NR_0        |\
-                                                  FMC_SDCR1_MWID_0      |\
+                FMC_Bank5_6->SDCR[SDRAM_BANK1]  = FMC_SDCR1_NC_1	|\
+						  FMC_SDCR1_NR_0        |\
+						  FMC_SDCR2_MWID_0      |\
                                                   FMC_SDCR1_NB          |\
                                                   FMC_SDCR1_CAS         |\
                                                   FMC_SDCR1_SDCLK_1     |\
                                                   FMC_SDCR1_RPIPE_0;
+//                FMC_Bank5_6->SDCR[SDRAM_BANK1]  = FMC_SDCR1_NR_0        |\
+//                                                  FMC_SDCR1_MWID_0      |\
+//                                                  FMC_SDCR1_NB          |\
+//                                                  FMC_SDCR1_CAS         |\
+//                                                  FMC_SDCR1_SDCLK_1     |\
+//                                                  FMC_SDCR1_RPIPE_0;
                 
                 // DRAM bank 时序寄存器配置
                 // TMRD: 2；TXSR: 7；TRAS：4；TRC：7；TWR：2；TRP：2；TRCD：2
+		// TMRD: 2；TXSR: 7；TRAS：4；TRC：6；TWR：2；TRP：2；TRCD：3
                 FMC_Bank5_6->SDTR[SDRAM_BANK1] &= 0x00000000;
                 FMC_Bank5_6->SDTR[SDRAM_BANK1]  = FMC_SDTR1_TMRD_0      |\
                                                   FMC_SDTR1_TXSR_2      |\
-                                                  FMC_SDTR1_TXSR_1      |\
+						  FMC_SDTR1_TXSR_1      |\
                                                   FMC_SDTR1_TRAS_1      |\
-                                                  FMC_SDTR1_TRAS_0      |\
+						  FMC_SDTR1_TRAS_0      |\
                                                   FMC_SDTR1_TRC_2       |\
-                                                  FMC_SDTR1_TRC_1       |\
+                                                  FMC_SDTR1_TRC_0       |\
                                                   FMC_SDTR1_TWR_0       |\
                                                   FMC_SDTR1_TRP_0       |\
                                                   FMC_SDTR1_TRCD_0;
@@ -167,7 +178,8 @@ int SDRAM_Bank_initial(uint32_t SDRAM_Bank)
                 FMC_Bank5_6->SDCR[SDRAM_BANK1] &= 0x00000000;
                 FMC_Bank5_6->SDCR[SDRAM_BANK2] &= 0x00000000;
                 FMC_Bank5_6->SDCR[SDRAM_BANK1]  = FMC_SDCR2_SDCLK_1 | FMC_SDCR2_RPIPE_0;
-                FMC_Bank5_6->SDCR[SDRAM_BANK2]  = FMC_SDCR2_NR_0        |\
+                FMC_Bank5_6->SDCR[SDRAM_BANK2]  = FMC_SDCR1_NC_1	|\
+						  FMC_SDCR2_NR_0        |\
                                                   FMC_SDCR2_MWID_0      |\
                                                   FMC_SDCR2_NB          |\
                                                   FMC_SDCR2_CAS;
@@ -178,7 +190,7 @@ int SDRAM_Bank_initial(uint32_t SDRAM_Bank)
                 FMC_Bank5_6->SDTR[SDRAM_BANK2] &= 0x00000000;                
                 
                 FMC_Bank5_6->SDTR[SDRAM_BANK1]  = FMC_SDTR2_TRC_2       |\
-                                                  FMC_SDTR2_TRC_1       |\
+                                                  FMC_SDTR2_TRC_0       |\
                                                   FMC_SDTR2_TRP_0;
                 
                 FMC_Bank5_6->SDTR[SDRAM_BANK2]  = FMC_SDTR2_TMRD_0      |\
@@ -211,13 +223,13 @@ int SDRAM_SelfCheck()
 	uint8_t		Read_data = 0;		// 读取的数据
 	
 	// 先擦除
-	for (add_offset = 0x00; add_offset < SDRAM_SIZE; add_offset++){
+	for (add_offset = 0x00; add_offset < SDRAM_SIZE; add_offset++ ){
 		*((uint8_t*) SDRAM_BASE + add_offset) = (uint8_t)0x00;
 	}
 	
 	// 写入数据
-	for (add_offset = 0x00; add_offset < SDRAM_SIZE; add_offset++){
-		*((uint8_t*) SDRAM_BASE + add_offset)  = (uint8_t)(Wirte_data+add_offset);
+	for (add_offset = 0x00; add_offset < SDRAM_SIZE; add_offset++ ){
+		*((uint8_t*) SDRAM_BASE + add_offset)  = (uint8_t)(Wirte_data);
 	}
 	// 读取比较
 	add_offset = 0;
@@ -225,11 +237,11 @@ int SDRAM_SelfCheck()
 		// 读取数据
 		Read_data	= *((uint8_t*) SDRAM_BASE + add_offset);
 		// 相同则点亮LED2
-		if(Read_data == (uint8_t)(Wirte_data+add_offset)){
-			 SET_LED(0, 1);
+		if(Read_data == (uint8_t)(Wirte_data + add_offset)){
+			 SET_LED(0, 0);
 		}else{
 			// 自检失败
-			SET_LED(1, 1);
+			SET_LED(0, 1);
 			return ERROR_SDRAM_CHECK;
 		}
 		add_offset++;

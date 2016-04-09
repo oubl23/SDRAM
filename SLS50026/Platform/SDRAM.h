@@ -17,7 +17,7 @@
 // SDRAM的基地址
 #define SDRAM_BASE	(uint32_t)0xD0000000
 // SDRAM的内存大小
-#define SDRAM_SIZE	(uint32_t)0x800000
+#define SDRAM_SIZE	(uint32_t)0x100000
 
 
 /**

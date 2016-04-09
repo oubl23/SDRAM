@@ -31,6 +31,7 @@ int main(void)
 //	uint32_t n=10;
 	// LED≥ı ºªØ≤ª¡¡
 //	SET_LED(0, 1);
+//	TIMER_Delay_us(1000);
 //	SET_LED(1, 1);
 //	Delay(0x3FFFFF);
 	SDRAM_Init();
@@ -51,7 +52,6 @@ int main(void)
 //	RENDER_add_map(0,0,MAP_OPTION_VALID,0xFFFFFFFF,0,0);
 //	RENDER_add_map(70,20,MAP_OPTION_VALID,0xFFFFFFFF,1,0);
 	while(1){
-
 //		RENDER_add_map(x +=10,y+=10,MAP_OPTION_VALID|MAP_OPTION_DYNAMIC,0x64FF0000,2,0);
 //		RENDER_add_map(i +=10,n+=10,MAP_OPTION_VALID|MAP_OPTION_DYNAMIC,0x64FF0000,1,0);
 //		RENDER_add_map(50,80,MAP_OPTION_VALID|MAP_OPTION_DYNAMIC,0xFFFF0000,0,0);
