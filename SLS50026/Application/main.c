@@ -31,6 +31,8 @@ int main(void)
 //	uint32_t n=10;
 	// LED≥ı ºªØ≤ª¡¡
 //	SET_LED(0, 1);
+//	SET_LED(1, 1);
+//	SET_LED(2, 1);
 //	TIMER_Delay_us(1000);
 //	SET_LED(1, 1);
 //	Delay(0x3FFFFF);
